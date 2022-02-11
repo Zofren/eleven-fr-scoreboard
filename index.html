@@ -134,6 +134,15 @@
       .alignTop {
         vertical-align: top;
       }
+
+      .credits {
+        font: bold 10px Helvetica;
+        color: #f50;
+        text-align: right;
+        position: relative;
+        top: 60px;
+        text-transform: none;
+      }
     </style>
   </head>
 
@@ -191,9 +200,12 @@
         </tr>
         <tr>
           <td><button @click="flipPlayers">Inverser</button></td>
-          <td></td>
+          <td>
+            <div class="credits">Scoreboard v1.0 proposé par PapyPigalle</div>
+          </td>
         </tr>
       </table>
+
       <div id="scoreboard">
         <div class="title">{{game.title}}</div>
         <div class="subtitle">{{game.phase}}</div>
