@@ -661,8 +661,6 @@
 
             // read all games for player1 and found recent ones against player2
             let now = Date.now();
-            player1.games = 0;
-            player2.games = 0;
             fetch(`https://www.elevenvr.club/accounts/${player1.id}/matches`)
               .then((res) => res.json())
               .then((json) => {
