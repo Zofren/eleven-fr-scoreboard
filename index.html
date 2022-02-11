@@ -27,10 +27,22 @@
       table {
         font: bold 20px Helvetica;
         color: white;
-        background-color: #000e;
+        background-color: #000d;
         border-spacing: 0.7em 0.4em;
-        border: solid black 1px;
+        border: none;
         border-radius: 10px;
+      }
+
+      #settings {
+        margin: 50px;
+        padding: 50px;
+      }
+
+      #scoreboard {
+        margin: 50px;
+        padding: 50px;
+        border: solid red 1px;
+        width: 600px;
       }
 
       .title {
@@ -122,14 +134,6 @@
       .alignTop {
         vertical-align: top;
       }
-
-      .setting {
-        display: flex;
-        text-transform: none;
-        justify-content: space-between;
-        width: 50%;
-        margin: 0.5rem;
-      }
     </style>
   </head>
 
@@ -190,7 +194,6 @@
           <td></td>
         </tr>
       </table>
-
       <div id="scoreboard">
         <div class="title">{{game.title}}</div>
         <div class="subtitle">{{game.phase}}</div>
@@ -244,6 +247,7 @@
     </div>
 
     <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://code.jquery.com/jquery-1.6.4.js"></script>
 
     <script>
       // const QUERY_PARAM_USERID1 = "user1";
@@ -255,25 +259,24 @@
       // console.log(paramUserId1 + " " + paramUserId2);
 
       const flags = [
-        { id: "fr", label: "France" },
-        { id: "ch", label: "Suisse" },
+        { id: "xx", label: "-" },
+        { id: "de", label: "Allemagne" },
         { id: "be", label: "Belgique" },
         { id: "ca", label: "Canada" },
-        { id: "nl", label: "Pays-Bas" },
-        { id: "de", label: "Allemagne" },
+        { id: "us", label: "Etats-Unis" },
+        { id: "es", label: "Espagne" },
+        { id: "eu", label: "Europe" },
+        { id: "fr", label: "France" },
+        { id: "gr", label: "Grèce" },
+        { id: "ie", label: "Irlande" },
         { id: "it", label: "Italie" },
+        { id: "nl", label: "Pays-Bas" },
+        { id: "pt", label: "Portugal" },
         { id: "gb", label: "Royaume-Uni" },
+        { id: "ch", label: "Suisse" },
       ];
 
-      /*fetch(
-        "https://www.eleven-france.com/admin-template/utilisateurs_liste_json.php",
-        { mode: "no-cors" }
-      )
-        .then((res) => res.json())
-        .then((json) => {
-          console.log(json);
-        });*/
-      const members = [
+      const hardcodedMembers = [
         { id: 484532, pseudo: "Seldon36" },
         { id: 154174, pseudo: "Elessar" },
         { id: 3831, pseudo: "alexttbcn" },
@@ -577,9 +580,7 @@
       const Scoreboard = {
         data() {
           return {
-            members: members.sort(
-              (m1, m2) => m1.pseudo.toUpperCase() > m2.pseudo.toUpperCase()
-            ),
+            members: [],
             flags: flags.sort(
               (f1, f2) => f1.label.toUpperCase() > f2.label.toUpperCase()
             ),
@@ -758,6 +759,24 @@
         created() {
           this.updateGames();
           this.interval = setInterval(this.updateGames, 3000);
+        },
+
+        mounted() {
+          this.members = hardcodedMembers.sort(
+            (m1, m2) => m1.pseudo.toUpperCase() > m2.pseudo.toUpperCase()
+          );
+
+          /*fetch(
+            "https://www.eleven-france.com/admin-template/utilisateurs_liste_json.php",
+            {
+              mode: "no-cors",
+            }
+          )
+            .then((res) => res.json())
+            .then((json) => {
+              console.log("toto");
+            })
+            .catch((err) => console.log(err));*/
         },
 
         beforeDestroy() {
