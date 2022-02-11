@@ -656,7 +656,7 @@
             let player2 = this.player2;
             let tempGames1 = 0;
             let tempGames2 = 0;
-  
+
             if (player1.id * player2.id <= 0) {
               return;
             }
@@ -737,9 +737,6 @@
                     }
                   }
                 }
-              
-              player1.games = tempGames1;
-              player2.games = tempGames2;
 
                 if (first) {
                   // no game found
@@ -750,6 +747,9 @@
                   player2.games = 0;
                   player1.scores = [0, 0, 0];
                   player2.scores = [0, 0, 0];
+                } else {
+                  player1.games = tempGames1;
+                  player2.games = tempGames2;
                 }
               });
           },
@@ -757,7 +757,7 @@
 
         created() {
           this.updateGames();
-          this.interval = setInterval(this.updateGames, 2000);
+          this.interval = setInterval(this.updateGames, 3000);
         },
 
         beforeDestroy() {
