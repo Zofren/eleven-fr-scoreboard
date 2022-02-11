@@ -654,7 +654,9 @@
           updateGames() {
             let player1 = this.player1;
             let player2 = this.player2;
-
+            let tempGames1 = 0;
+            let tempGames2 = 0;
+  
             if (player1.id * player2.id <= 0) {
               return;
             }
@@ -718,16 +720,16 @@
                       if (game.attributes.winner == 0) {
                         // home team won
                         if (homeId == player1.id) {
-                          player1.games += 1;
+                          tempGames1 += 1;
                         } else {
-                          player2.games += 1;
+                          tempGames2 += 1;
                         }
                       } else if (game.attributes.winner == 1) {
                         // away team won
                         if (awayId == player1.id) {
-                          player1.games += 1;
+                          tempGames1 += 1;
                         } else {
-                          player2.games += 1;
+                          tempGames2 += 1;
                         }
                       } else {
                         console.log("should never happen : no winner");
@@ -735,6 +737,9 @@
                     }
                   }
                 }
+              
+              player1.games = tempGames1;
+              player2.games = tempGames2;
 
                 if (first) {
                   // no game found
