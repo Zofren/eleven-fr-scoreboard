@@ -295,14 +295,6 @@
     </div>
 
     <script>
-      // const QUERY_PARAM_USERID1 = "user1";
-      // const QUERY_PARAM_USERID2 = "user2";
-      // const urlParams = new URLSearchParams(window.location.search);
-      // const paramUserId1 = parseInt(urlParams.get(QUERY_PARAM_USERID1));
-      // const paramUserId2 = parseInt(urlParams.get(QUERY_PARAM_USERID2));
-
-      // console.log(paramUserId1 + " " + paramUserId2);
-
       const flags = [
         { id: "xx", label: "-" },
         { id: "de", label: "Allemagne" },
@@ -534,23 +526,6 @@
         created() {
           this.updateGames();
           this.interval = setInterval(this.updateGames, 3000);
-        },
-
-        mounted() {
-          /*this.members = hardcodedMembers.sort(
-            (m1, m2) => m1.pseudo.toUpperCase() > m2.pseudo.toUpperCase()
-          );*/
-          /*fetch(
-            "https://www.eleven-france.com/admin-template/utilisateurs_liste_json.php",
-            {
-              mode: "no-cors",
-            }
-          )
-            .then((res) => res.json())
-            .then((json) => {
-              console.log("toto");
-            })
-            .catch((err) => console.log(err));*/
         },
 
         beforeDestroy() {
