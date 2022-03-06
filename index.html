@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Incrustation ElevenVR France</title>
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
 
     <style>
       * {
@@ -48,7 +54,7 @@
       .title {
         font: bold 12px Helvetica;
         display: inline;
-        padding: 0px 10px 0px 5px;
+        padding: 3px 10px 3px 5px;
         margin-left: 10px;
         border-spacing: 0.5em 0.5em;
         border: solid black 1px;
@@ -65,7 +71,7 @@
         font: bold 12px Helvetica;
         display: inline;
         text-transform: none;
-        padding: 0px 5px 0px 10px;
+        padding: 3px 5px 3px 10px;
         margin-right: 10px;
         border-spacing: 0.5em 0.5em;
         border: solid black 1px;
@@ -143,6 +149,10 @@
         top: 60px;
         text-transform: none;
       }
+
+      .search {
+        width: 80px;
+      }
     </style>
   </head>
 
@@ -176,11 +186,24 @@
                 {{ flag.label }}
               </option>
             </select>
+            <input
+              name="search1"
+              id="search1"
+              class="search"
+              type="text"
+              v-model="search1"
+            />
             <select v-model="player1.id">
-              <option v-for="member in members" v-bind:value="member.id">
-                {{ member.pseudo }}
+              <option v-for="member in searchList1" v-bind:value="member.id">
+                {{ member.name }}
               </option>
             </select>
+            <button @click="player1.offset--">
+              <span class="fa-solid fa-minus fa-lg"></span>
+            </button>
+            <button @click="player1.offset++">
+              <span class="fa-solid fa-plus fa-lg"></span>
+            </button>
           </td>
         </tr>
         <tr>
@@ -191,17 +214,30 @@
                 {{ flag.label }}
               </option>
             </select>
+            <input
+              name="search2"
+              id="search2"
+              class="search"
+              type="text"
+              v-model="search2"
+            />
             <select v-model="player2.id">
-              <option v-for="member in members" v-bind:value="member.id">
-                {{ member.pseudo }}
+              <option v-for="member in searchList2" v-bind:value="member.id">
+                {{ member.name }}
               </option>
             </select>
+            <button @click="player2.offset--">
+              <span class="fa-solid fa-minus fa-lg"></span>
+            </button>
+            <button @click="player2.offset++">
+              <span class="fa-solid fa-plus fa-lg"></span>
+            </button>
           </td>
         </tr>
         <tr>
           <td><button @click="flipPlayers">Inverser</button></td>
           <td>
-            <div class="credits">Scoreboard v1.0 proposé par PapyPigalle</div>
+            <div class="credits">Scoreboard v1.1 proposé par PapyPigalle</div>
           </td>
         </tr>
       </table>
@@ -222,7 +258,7 @@
               <div class="name">{{player1.name}}</div>
             </td>
             <td class="games">
-              <div class="circle">{{player1.games}}</div>
+              <div class="circle">{{player1.games + player1.offset}}</div>
             </td>
             <td
               v-for="score in player1.scores"
@@ -244,7 +280,7 @@
               </div>
             </td>
             <td class="games">
-              <div class="circle">{{player2.games}}</div>
+              <div class="circle">{{player2.games + player2.offset}}</div>
             </td>
             <td
               v-for="score in player2.scores"
@@ -258,18 +294,7 @@
       </div>
     </div>
 
-    <script src="https://unpkg.com/vue@next"></script>
-    <script src="https://code.jquery.com/jquery-1.6.4.js"></script>
-
     <script>
-      // const QUERY_PARAM_USERID1 = "user1";
-      // const QUERY_PARAM_USERID2 = "user2";
-      // const urlParams = new URLSearchParams(window.location.search);
-      // const paramUserId1 = parseInt(urlParams.get(QUERY_PARAM_USERID1));
-      // const paramUserId2 = parseInt(urlParams.get(QUERY_PARAM_USERID2));
-
-      // console.log(paramUserId1 + " " + paramUserId2);
-
       const flags = [
         { id: "xx", label: "-" },
         { id: "de", label: "Allemagne" },
@@ -288,311 +313,13 @@
         { id: "ch", label: "Suisse" },
       ];
 
-      const hardcodedMembers = [
-        { id: 484532, pseudo: "Seldon36" },
-        { id: 154174, pseudo: "Elessar" },
-        { id: 3831, pseudo: "alexttbcn" },
-        { id: 519852, pseudo: "ygen72" },
-        { id: 372961, pseudo: "sunking73" },
-        { id: 201352, pseudo: "76Spirit76" },
-        { id: 297223, pseudo: "Ribou85[FR]" },
-        { id: 433301, pseudo: "Snakefr" },
-        { id: 387612, pseudo: "Looney-Vicar" },
-        { id: 709273, pseudo: "grillon03" },
-        { id: 77039, pseudo: "loutch12" },
-        { id: 479992, pseudo: "RafiSqy" },
-        { id: 393948, pseudo: "Lacout_PONGORI" },
-        { id: 289284, pseudo: "11belgium.com" },
-        { id: 235185, pseudo: "skwell[FR]" },
-        { id: 19886, pseudo: "IAmMrPresidenT" },
-        { id: 330457, pseudo: "cd94tt" },
-        { id: 213067, pseudo: "MelArn" },
-        { id: 127187, pseudo: "soloping" },
-        { id: 243692, pseudo: "tomyoculus" },
-        { id: 746221, pseudo: "jejeping" },
-        { id: 792225, pseudo: "jejeloncke" },
-        { id: 32195, pseudo: "topdan-qc-fr" },
-        { id: 424589, pseudo: "harrynfr" },
-        { id: 15652, pseudo: "EZUS22" },
-        { id: 492821, pseudo: "Bhroughing" },
-        { id: 693464, pseudo: "mircc" },
-        { id: 674152, pseudo: "guigui59650" },
-        { id: 841267, pseudo: "Steackeman" },
-        { id: 810477, pseudo: "lefab24" },
-        { id: 500158, pseudo: "FrostySqy" },
-        { id: 380245, pseudo: "asfafedx" },
-        { id: 879024, pseudo: "Mitchh25" },
-        { id: 219766, pseudo: "malthazare8" },
-        { id: 516208, pseudo: "knacki13" },
-        { id: 632188, pseudo: "Ponponkiller" },
-        { id: 240440, pseudo: "CoachTT" },
-        { id: 576531, pseudo: "THEDID60" },
-        { id: 734546, pseudo: "Estariol72" },
-        { id: 3910, pseudo: "galo2133" },
-        { id: 448964, pseudo: "Origins-Illyria" },
-        { id: 379208, pseudo: "PgunMan" },
-        { id: 669030, pseudo: "ChookiChok" },
-        { id: 419337, pseudo: "Gitan21" },
-        { id: 406641, pseudo: "Labeaum" },
-        { id: 503129, pseudo: "Pingouf" },
-        { id: 804734, pseudo: "zlatannnn" },
-        { id: 128521, pseudo: "asblanc.(fr)" },
-        { id: 561725, pseudo: "ClemeeMelo" },
-        { id: 253160, pseudo: "matgh4-FR" },
-        { id: 287371, pseudo: "Witverliesje" },
-        { id: 487157, pseudo: "XUFUNNY" },
-        { id: 957564, pseudo: "Tibzssen" },
-        { id: 727824, pseudo: "rubcd94" },
-        { id: 195701, pseudo: "Nadarnal.FR" },
-        { id: 774148, pseudo: "dayaud" },
-        { id: 378823, pseudo: "kebirom" },
-        { id: 378823, pseudo: "kebirom" },
-        { id: 378077, pseudo: "MaxLaMenace69" },
-        { id: 489799, pseudo: "Alextlse" },
-        { id: 163647, pseudo: "SwarkosFR" },
-        { id: 289157, pseudo: "StephaneLelong" },
-        { id: 213061, pseudo: "JDuT" },
-        { id: 89423, pseudo: "j.renverse" },
-        { id: 752537, pseudo: "chris-c" },
-        { id: 144453, pseudo: "Filipo27" },
-        { id: 22978, pseudo: "Calimero_Oeuf" },
-        { id: 275830, pseudo: "Mortelcoach" },
-        { id: 575390, pseudo: "DjRumce-unrk" },
-        { id: 785250, pseudo: "P3T-J1" },
-        { id: 422433, pseudo: "PapyPigalle" },
-        { id: 346, pseudo: "jib78" },
-        { id: 496643, pseudo: "Fredppcp" },
-        { id: 170188, pseudo: "cyprien66750" },
-        { id: 143455, pseudo: "Flonflon29" },
-        { id: 636968, pseudo: "djlov" },
-        { id: 4517, pseudo: "einganien.fr" },
-        { id: 809570, pseudo: "Themus84" },
-        { id: 293817, pseudo: "Picotal" },
-        { id: 496034, pseudo: "Sydoc" },
-        { id: 417071, pseudo: "Patrick_Renardcd94TT" },
-        { id: 264544, pseudo: "stephcle123" },
-        { id: 116896, pseudo: "ZWR" },
-        { id: 498001, pseudo: "Matves7" },
-        { id: 472729, pseudo: "gortika_loveu" },
-        { id: 472729, pseudo: "gortika_loveu" },
-        { id: 497862, pseudo: "cricri99" },
-        { id: 169115, pseudo: "oizirbaf(Be)" },
-        { id: 466929, pseudo: "STB-CTT-VR" },
-        { id: 9225, pseudo: "Herya[FR]" },
-        { id: 5442, pseudo: "rougepoisson" },
-        { id: 270018, pseudo: "Tyboots17" },
-        { id: 477291, pseudo: "JoSqy" },
-        { id: 31026, pseudo: "prozero" },
-        { id: 487364, pseudo: "Valentinoo" },
-        { id: 25982, pseudo: "speedypizz" },
-        { id: 463960, pseudo: "Yassine_B" },
-        { id: 891253, pseudo: "cedhen60" },
-        { id: 72848, pseudo: "jujuzenzen" },
-        { id: 520309, pseudo: "ALEXPING" },
-        { id: 93475, pseudo: "LeFla" },
-        { id: 781126, pseudo: "dh85[FR]" },
-        { id: 624077, pseudo: "plataux" },
-        { id: 461279, pseudo: "Olio99" },
-        { id: 869021, pseudo: "Jeremstache" },
-        { id: 166953, pseudo: "MrBoom25(fr)" },
-        { id: 494, pseudo: "coachy-fr" },
-        { id: 481782, pseudo: "GueyeLT" },
-        { id: 418874, pseudo: "Meikai_life" },
-        { id: 515976, pseudo: "djibb" },
-        { id: 213611, pseudo: "Phetaens" },
-        { id: 893253, pseudo: "Fab579" },
-        { id: 312598, pseudo: "lrjeux" },
-        { id: 403731, pseudo: "unrealiste" },
-        { id: 382815, pseudo: "tAz-07" },
-        { id: 289529, pseudo: "Raph91178" },
-        { id: 200639, pseudo: "stanbenett" },
-        { id: 918477, pseudo: "Magnicof" },
-        { id: 477474, pseudo: "mrieuse" },
-        { id: 51508, pseudo: "stargate-88" },
-        { id: 395383, pseudo: "Riosnob-wchair" },
-        { id: 447760, pseudo: "Cycypingpong" },
-        { id: 705801, pseudo: "poupette1985" },
-        { id: 333787, pseudo: "jeffleboss/pcf" },
-        { id: 687040, pseudo: "HAMMOS" },
-        { id: 455319, pseudo: "Kettch" },
-        { id: 235063, pseudo: "nicoconex-fr" },
-        { id: 142791, pseudo: "Arnokeyeur" },
-        { id: 322916, pseudo: "Garusbrutus" },
-        { id: 492324, pseudo: "RemyDoyen" },
-        { id: 124002, pseudo: "RomyNZ~fr" },
-        { id: 599112, pseudo: "JayS5915" },
-        { id: 478104, pseudo: "Ping4Alzheimer" },
-        { id: 101, pseudo: "SOULNIGHT" },
-        { id: 501974, pseudo: "StefTolo89" },
-        { id: 214891, pseudo: "omyk51_FR" },
-        { id: 459261, pseudo: "Arctiik" },
-        { id: 222476, pseudo: "syrocket(fr)" },
-        { id: 468528, pseudo: "arnaud38" },
-        { id: 724777, pseudo: "rocinante79" },
-        { id: 719368, pseudo: "RG25000" },
-        { id: 679185, pseudo: "joshzouzer" },
-        { id: 537881, pseudo: "P3L49Fr" },
-        { id: 9613, pseudo: "miyvi" },
-        { id: 97902, pseudo: "Nicoaye-FR" },
-        { id: 505911, pseudo: "GregEst" },
-        { id: 388382, pseudo: "otake" },
-        { id: 715426, pseudo: "@Valliero" },
-        { id: 715426, pseudo: "@Valliero" },
-        { id: 715426, pseudo: "@Valliero" },
-        { id: 336015, pseudo: "Azor" },
-        { id: 278201, pseudo: "CrazyEightTT" },
-        { id: 1014582, pseudo: "christian.v.1804" },
-        { id: 530900, pseudo: "Tounio" },
-        { id: 440135, pseudo: "Fabann" },
-        { id: 561501, pseudo: "hammos06" },
-        { id: 434937, pseudo: "Lulu_16" },
-        { id: 830198, pseudo: "CorinneCapbreton" },
-        { id: 808678, pseudo: "Maverick3005" },
-        { id: 43643, pseudo: "Georgy-JUMP" },
-        { id: 457389, pseudo: "francois15" },
-        { id: 1001541, pseudo: "Gaste64" },
-        { id: 982502, pseudo: "swallyx" },
-        { id: 982502, pseudo: "swallyx" },
-        { id: 591057, pseudo: "bouyachaka" },
-        { id: 381529, pseudo: "loorent57" },
-        { id: 381529, pseudo: "loorent57" },
-        { id: 841382, pseudo: "leojanicot" },
-        { id: 268486, pseudo: "Kaerell" },
-        { id: 752523, pseudo: "laurent13127" },
-        { id: 117986, pseudo: "nfloquet" },
-        { id: 135723, pseudo: "romu333" },
-        { id: 840613, pseudo: "KevinDozot" },
-        { id: 489329, pseudo: "Harry921" },
-        { id: 770220, pseudo: "Toufik78" },
-        { id: 378202, pseudo: "KobzOwNeD" },
-        { id: 471806, pseudo: "JeromeFrance" },
-        { id: 101423, pseudo: "romain" },
-        { id: 457511, pseudo: "ttacc86" },
-        { id: 522174, pseudo: "ChrisMclaod" },
-        { id: 840887, pseudo: "Gregre45" },
-        { id: 910981, pseudo: "CestPasFaux" },
-        { id: 124239, pseudo: "LeeONell" },
-        { id: 272935, pseudo: "ziegmen" },
-        { id: 16839, pseudo: "LucquilOOk" },
-        { id: 29221, pseudo: "DrFox78(fr)" },
-        { id: 443981, pseudo: "tennis2table" },
-        { id: 406167, pseudo: "Olivier-Bussy" },
-        { id: 692673, pseudo: "Bennrousseau" },
-        { id: 876026, pseudo: "Marco84270" },
-        { id: 801426, pseudo: "Stephane.F57" },
-        { id: 1821, pseudo: "gikann" },
-        { id: 714789, pseudo: "Oliversan" },
-        { id: 602053, pseudo: "IgnisorArdenti" },
-        { id: 673216, pseudo: "gerterf" },
-        { id: 633041, pseudo: "cobalt2760" },
-        { id: 704265, pseudo: "DomeCsp" },
-        { id: 194997, pseudo: "LaGz-_-TrYh" },
-        { id: 374671, pseudo: "burdy" },
-        { id: 461160, pseudo: "Cyrillcr" },
-        { id: 461160, pseudo: "Cyrillcr" },
-        { id: 724619, pseudo: "macgregor59" },
-        { id: 357217, pseudo: "Cyrillus82" },
-        { id: 515351, pseudo: "crazyping" },
-        { id: 760886, pseudo: "kanawoods" },
-        { id: 719380, pseudo: "the.only.julien" },
-        { id: 355608, pseudo: "petitwist" },
-        { id: 889791, pseudo: "lolo78180" },
-        { id: 268150, pseudo: "jackyvirtuel" },
-        { id: 601638, pseudo: "Biff_Beerman" },
-        { id: 603961, pseudo: "Don_88_PaPa" },
-        { id: 956191, pseudo: "CHRISPAT" },
-        { id: 477253, pseudo: "So0lz" },
-        { id: 346615, pseudo: "ericd" },
-        { id: 56965, pseudo: "[FR]PANCHOKA" },
-        { id: 852575, pseudo: "doud95" },
-        { id: 993355, pseudo: "Alroze" },
-        { id: 841927, pseudo: "Cedoch_FR" },
-        { id: 481842, pseudo: "httcd94" },
-        { id: 186928, pseudo: "pasnola" },
-        { id: 889874, pseudo: "ake24" },
-        { id: 624934, pseudo: "manoss76350" },
-        { id: 477374, pseudo: "Gregosss" },
-        { id: 922513, pseudo: "RG_GoDZilla" },
-        { id: 270832, pseudo: "Kinze" },
-        { id: 50282, pseudo: "harkan" },
-        { id: 617706, pseudo: "eldada00078" },
-        { id: 107724, pseudo: "nico-angenon" },
-        { id: 387930, pseudo: "Pingdead" },
-        { id: 399823, pseudo: "triplie" },
-        { id: 389503, pseudo: "Seborg" },
-        { id: 614518, pseudo: "Pinierdavid" },
-        { id: 122669, pseudo: "Vestr1ker06" },
-        { id: 702315, pseudo: "fredblanch" },
-        { id: 381342, pseudo: "zepolim" },
-        { id: 1011669, pseudo: "ben-french" },
-        { id: 273027, pseudo: "I.WANT.TO.PONG" },
-        { id: 361099, pseudo: "Dyonis" },
-        { id: 811488, pseudo: "Fabonly" },
-        { id: 827413, pseudo: "pabelus" },
-        { id: 804813, pseudo: "Dextro13008-FR" },
-        { id: 314870, pseudo: "SPADE" },
-        { id: 306676, pseudo: "OcupiR" },
-        { id: 757333, pseudo: "Warthog57" },
-        { id: 622500, pseudo: "Frenchblogger" },
-        { id: 712588, pseudo: "Franck42" },
-        { id: 37877, pseudo: "HADDOCK62" },
-        { id: 131842, pseudo: "chriscricri" },
-        { id: 477386, pseudo: "freflouce" },
-        { id: 326170, pseudo: "pouletfafa" },
-        { id: 673103, pseudo: "Babylou95" },
-        { id: 220819, pseudo: "LotusVR" },
-        { id: 472575, pseudo: "Mariusky" },
-        { id: 825057, pseudo: "Mariusky71" },
-        { id: 881761, pseudo: "Jonplayersnow" },
-        { id: 924280, pseudo: "popot" },
-        { id: 929002, pseudo: "couzine" },
-        { id: 58227, pseudo: "UndeadLemur" },
-        { id: 999981, pseudo: "pixluser" },
-        { id: 838879, pseudo: "Quentinous12" },
-        { id: 222713, pseudo: "Ludo12h10" },
-        { id: 317927, pseudo: "benbennybenben" },
-        { id: 320309, pseudo: "paydirtz" },
-        { id: 48748, pseudo: "Philou8" },
-        { id: 1067651, pseudo: "ZEPHOENIX[FR]" },
-        { id: 20643, pseudo: "El_Pakito" },
-        { id: 417025, pseudo: "LandwalkerVR" },
-        { id: 315083, pseudo: "gphines24" },
-        { id: 319664, pseudo: "SamZ" },
-        { id: 482993, pseudo: "Jade37" },
-        { id: 461836, pseudo: "franboise" },
-        { id: 444277, pseudo: "Mr-George_guest" },
-        { id: 491182, pseudo: "fftt" },
-        { id: 183242, pseudo: "Pierre_FR" },
-        { id: 146097, pseudo: "Charlotte" },
-        { id: 153499, pseudo: "Diode3030" },
-        { id: 44966, pseudo: "jeaw2510" },
-        { id: 88371, pseudo: "cocoa0914" },
-        { id: 912542, pseudo: "TTV Ashrltv" },
-        { id: 925847, pseudo: "Yannis68" },
-        { id: 316670, pseudo: "Steel" },
-        { id: 76388, pseudo: "Pinglan" },
-        { id: 329116, pseudo: "dontnagatme" },
-        { id: 395942, pseudo: "chouchounet" },
-        { id: 592873, pseudo: "Aymeric59" },
-        { id: 637457, pseudo: "tomping" },
-        { id: 561311, pseudo: "Sperol" },
-        { id: 845552, pseudo: "XxMjMxX" },
-        { id: 181514, pseudo: "josss" },
-        { id: 315627, pseudo: "FlacidCastro" },
-        { id: 513749, pseudo: "MRRapace" },
-        { id: 826745, pseudo: "spock422" },
-        { id: 489477, pseudo: "plibert70" },
-        { id: 636206, pseudo: "michel.ronsin" },
-        { id: 361208, pseudo: "fredbzh044" },
-        { id: 869583, pseudo: "EricVs" },
-        { id: 429932, pseudo: "pwaskai" },
-        { id: 144213, pseudo: "DanTheKing73" },
-      ];
-
       const Scoreboard = {
         data() {
           return {
-            members: [],
+            search1: "",
+            search2: "",
+            searchList1: [],
+            searchList2: [],
             flags: flags.sort(
               (f1, f2) => f1.label.toUpperCase() > f2.label.toUpperCase()
             ),
@@ -607,6 +334,7 @@
               elo: 0,
               nationality: "fr",
               games: 0,
+              offset: 0,
               scores: [],
             },
             player2: {
@@ -616,6 +344,7 @@
               elo: 0,
               nationality: "fr",
               games: 0,
+              offset: 0,
               scores: [],
             },
           };
@@ -642,9 +371,35 @@
               this.updateGames();
             }
           },
+
+          search1: async function () {
+            if (this.search1.length >= 3) {
+              this.searchList1 = await this.loadPlayerList(this.search1);
+            }
+          },
+
+          search2: async function () {
+            if (this.search2.length >= 3) {
+              this.searchList2 = await this.loadPlayerList(this.search2);
+            }
+          },
         },
 
         methods: {
+          async loadPlayerList(searchTerm) {
+            let results = [];
+            await fetch(
+              "https://www.elevenvr.club/accounts/search/" + searchTerm
+            )
+              .then((res) => res.json())
+              .then((json) => {
+                for (r of json.data) {
+                  results.push({ id: r.id, name: r.attributes["user-name"] });
+                }
+              });
+            return results;
+          },
+
           flipPlayers(event) {
             [this.player1, this.player2] = [this.player2, this.player1];
           },
@@ -771,24 +526,6 @@
         created() {
           this.updateGames();
           this.interval = setInterval(this.updateGames, 3000);
-        },
-
-        mounted() {
-          this.members = hardcodedMembers.sort(
-            (m1, m2) => m1.pseudo.toUpperCase() > m2.pseudo.toUpperCase()
-          );
-
-          /*fetch(
-            "https://www.eleven-france.com/admin-template/utilisateurs_liste_json.php",
-            {
-              mode: "no-cors",
-            }
-          )
-            .then((res) => res.json())
-            .then((json) => {
-              console.log("toto");
-            })
-            .catch((err) => console.log(err));*/
         },
 
         beforeDestroy() {
